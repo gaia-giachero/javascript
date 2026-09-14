@@ -1,0 +1,41 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tema-chiaro {
+    background-color: #fff;
+}
+
+.tema-chiaro h1{
+    text-transform: uppercase;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.tema-chiaro button{
+    text-transform: uppercase;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #fc4ba6;
+    background-color: #f3a1cc;
+}
+
+.tema-scuro{
+    background-color: #000;
+}
+
+.tema-scuro h1{
+    text-transform: uppercase;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #fff;
+}
+
+.tema-scuro button{
+    text-transform: uppercase;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #f3a1cc;
+    background-color: #fc4ba6;
+}
