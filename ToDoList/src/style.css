@@ -295,8 +295,6 @@ code {
   }
 }
 
-/* .box-input{
-  display: flex;
-  flex-direction: column;
-
-} */
+.completata{
+  text-decoration: line-through;
+}
