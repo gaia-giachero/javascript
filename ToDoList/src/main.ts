@@ -14,9 +14,9 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <input id='inputAttivita' type='text' placeholder='Inserisci l'attività...' />
     <button id='btn' type='button'>Aggiungi</button>
     <div id="filtri">
-      <button type="button" class="btn-filtri">Tutte</button>
-      <button type="button" class="btn-filtri">Da Fare</button>
-      <button type="button" class="btn-filtri">Completate</button>
+      <button id="tutte" type="button" class="btn-filtri">Tutte</button>
+      <button id="daFare" type="button" class="btn-filtri">Da Fare</button>
+      <button id="completate" type="button" class="btn-filtri">Completate</button>
     </div>
     <ul id='lista'></ul>
   </div>
@@ -26,22 +26,26 @@ let attivitaInput = document.querySelector<HTMLInputElement>("#inputAttivita");
 let button = document.querySelector<HTMLButtonElement>("#btn");
 let listaToDo = document.querySelector("#lista");
 
-renderTodo();
+let bntTutte = document.querySelector("#tutte");
+let bntDaFare = document.querySelector("#daFare");
+let bntCompletate = document.querySelector("#completate");
 
-function renderTodo() {
+renderTodo(ToDoList);
+
+function renderTodo(lista: Todo[]) {
   let renderLista = ``;
 
-  for (let i = 0; i < ToDoList.length; i++) {
+  for (let i = 0; i < lista.length; i++) {
     renderLista += `
-      ${ToDoList[i].completata ? 
-        `<li class="completata"><input type="checkbox" id="${ToDoList[i].id}" class="check" checked>` 
-        : 
-        `<li class="non-completata"><input type="checkbox" id="${ToDoList[i].id}" class="check">`
+      ${
+        lista[i].completata
+          ? `<li class="completata"><input type="checkbox" data-id="${lista[i].id}" class="check" checked>`
+          : `<li class="non-completata"><input type="checkbox" data-id="${lista[i].id}" class="check">`
       } 
 
-        ${ToDoList[i].attivita} 
+        ${lista[i].attivita} 
         
-        <button id="${ToDoList[i].id}" class="btn-elimina" type="button">Elimina</button>
+        <button data-id="${lista[i].id}" class="btn-elimina" type="button">Elimina</button>
       </li>
     `;
   }
@@ -52,50 +56,93 @@ function renderTodo() {
 
   for (let i = 0; i < btnElimina.length; i++) {
     btnElimina[i]?.addEventListener("click", (e) => {
-      let btnId = Number((e.target! as HTMLButtonElement).id);
-      // console.log(btnId);
+      let btnId = Number((e.target! as HTMLButtonElement).dataset.id);
+
+      console.log("Bottone cliccato:", e.target);
+      console.log("ID ricevuto:", btnId);
+
       eliminaToDo(btnId);
-      // console.log(ToDoList);
     });
   }
 
   let checkInput = document.querySelectorAll(".check");
 
-  for (let i=0; i<checkInput.length; i++){
+  for (let i = 0; i < checkInput.length; i++) {
     checkInput[i]?.addEventListener("change", (e) => {
-      let checkId = Number((e.target! as HTMLInputElement).id);
+      let checkId = Number((e.target! as HTMLInputElement).dataset.id);
 
-      const todoTrovata = ToDoList.find(todo => todo.id === checkId);
-      console.log(todoTrovata)
+      const todoTrovata = lista.find((todo) => todo.id === checkId);
+      console.log(todoTrovata);
 
       todoTrovata!.completata = (e.target! as HTMLInputElement).checked;
 
-      renderTodo();
-    })
+      renderTodo(lista);
+    });
   }
 }
 
 const addToDo = () => {
+  let maxId = ToDoList[0].id ? ToDoList[0].id : 0;
+
+  for (let i = 0; i < ToDoList.length; i++) {
+    // console.log('ID partenza: ', maxId)
+
+    if (ToDoList[i].id > maxId) {
+      maxId = ToDoList[i].id;
+    }
+  }
+  console.log("ID max: ", maxId);
+
   let nuovoToDo = {
-    id: ToDoList.length + 1,
+    id: maxId + 1,
     attivita: attivitaInput!.value,
     completata: false,
   };
 
   if (nuovoToDo.attivita !== "") {
     ToDoList.push(nuovoToDo);
-    console.log(ToDoList);
-    renderTodo();
+    // console.log(ToDoList);
+    console.log("Nuovo ID: ", maxId);
+    renderTodo(ToDoList);
   }
 };
 
 button?.addEventListener("click", addToDo);
 
 function eliminaToDo(btnId: number) {
+  console.log("ID da eliminare:", btnId);
+  console.log("Lista PRIMA:", ToDoList);
+
   let newToDoList = ToDoList.filter((todo) => {
     return todo.id !== btnId;
   });
 
+  console.log("Lista DOPO:", newToDoList);
+
   ToDoList = newToDoList;
-  renderTodo();
+  renderTodo(ToDoList);
 }
+
+bntTutte?.addEventListener("click", () => {
+  renderTodo(ToDoList);
+});
+
+bntDaFare?.addEventListener("click", () => {
+  let ToDoDaFare = [];
+  for (let i = 0; i < ToDoList.length; i++) {
+    if (ToDoList[i].completata === false) {
+      ToDoDaFare.push(ToDoList[i]);
+    }
+  }
+  renderTodo(ToDoDaFare);
+});
+
+bntCompletate?.addEventListener("click", () => {
+  let ToDoCompletate = [];
+  for (let i = 0; i < ToDoList.length; i++) {
+    if (ToDoList[i].completata === true) {
+      ToDoCompletate.push(ToDoList[i]);
+    }
+  }
+  renderTodo(ToDoCompletate);
+});
