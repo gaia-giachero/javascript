@@ -11,8 +11,10 @@ console.log(ToDoList);
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <h1>To Do List</h1>
   <div class='box-list'>
-    <input id='inputAttivita' type='text' placeholder='Inserisci l'attività...' />
-    <button id='btn' type='button'>Aggiungi</button>
+    <div class='box-input'>
+      <input id='inputAttivita' type='text' placeholder='Inserisci la tua prossima attività' />
+      <button id='btn' type='button'>Aggiungi</button>
+    </div>
     <div id="filtri">
       <button id="tutte" type="button" class="btn-filtri">Tutte</button>
       <button id="daFare" type="button" class="btn-filtri">Da Fare</button>
@@ -108,6 +110,12 @@ const addToDo = () => {
 };
 
 button?.addEventListener("click", addToDo);
+
+attivitaInput?.addEventListener('keydown', (e) => {
+  if(e.key == 'Enter'){
+    button!.click();
+  }
+})
 
 function eliminaToDo(btnId: number) {
   console.log("ID da eliminare:", btnId);
