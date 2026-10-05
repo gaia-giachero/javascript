@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physical Italia</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <h1>Physical Italia</h1>
+
+    <div class="form-row">
+      <input id="atleta-nome" type="text" placeholder="Nome" />
+      <input id="atleta-disciplina" type="text" placeholder="Disciplina" />
+      <input id="atleta-foto" type="text" placeholder="URL della foto" />
+      <!-- Per il bonus "foto da file": in alternativa all'URL -->
+      <input id="atleta-file" type="file" accept="image/*" />
+      <button id="add-btn">Aggiungi</button>
+    </div>
+
+    <div class="filters">
+      <button id="filter-all">Tutti</button>
+      <button id="filter-squadra">In squadra</button>
+      <button id="filter-riserve">Riserve</button>
+    </div>
+
+    <!-- Per il bonus "contatore": scrivi qui il testo con textContent -->
+    <p id="contatore"></p>
+
+    <div id="atleti-list" class="griglia"></div>
+
+    <!-- Due versioni del progetto: lascia attiva UNA sola riga e commenta l'altra.
+         starter = file di partenza con i TODO, final = soluzione completa -->
+   <!-- <script type="module" src="/src/starter/main-starter.ts"></script>  -->
+     <script type="module" src="/src/final/main-final.ts"></script> 
+  </body>
+</html>
