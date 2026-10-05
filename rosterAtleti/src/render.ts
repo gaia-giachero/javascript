@@ -11,13 +11,17 @@ function creaCard(atleta: Atleta): HTMLElement {
   //   - una checkbox "In squadra" (al change -> impostaInSquadra + renderAtleti)
   //   - un pulsante "Elimina" (al click -> eliminaAtleta + renderAtleti)
   // Se l'atleta e' in squadra, aggiungi la classe "in-squadra" alla card.
-  
+
   const card = document.createElement("div");
   card.className = "card";
 
+  // if (atleta.inSquadra) {
+  //   card.classList.add("in-squadra");
+  // }
+
   const imgAtleta = document.createElement("img");
   imgAtleta.className = "img-atleta";
-  imgAtleta.src = atleta.foto;
+  imgAtleta.src = `./img/${atleta.foto}`;
   imgAtleta.alt = atleta.nome;
 
   const nomeAtleta = document.createElement("h3");
@@ -26,30 +30,39 @@ function creaCard(atleta: Atleta): HTMLElement {
   const disciplinaAtleta = document.createElement("p");
   disciplinaAtleta.textContent = atleta.disciplina;
 
+  const labelSquadra = document.createElement("label");
+  labelSquadra.className = "checkbox-label";
+
   const atletaSquadra = document.createElement("input");
-  atletaSquadra.type = 'checkbox';
+  atletaSquadra.type = "checkbox";
   atletaSquadra.checked = atleta.inSquadra;
-  atletaSquadra.addEventListener('change', () => {
+  if(atletaSquadra.checked){
+    card.classList.add("in-squadra");
+  }
+  atletaSquadra.addEventListener("change", () => {
     impostaInSquadra(atleta.id, atletaSquadra.checked);
     renderAtleti();
-  })
+  });
+
+  const testoCheckbox = document.createTextNode(" In squadra");
+  labelSquadra.append(atletaSquadra, testoCheckbox);
 
   const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = 'Elimina';
-  deleteBtn.addEventListener('click', () => {
+  deleteBtn.textContent = "Elimina";
+  deleteBtn.addEventListener("click", () => {
     eliminaAtleta(atleta.id);
     renderAtleti();
-  })
+  });
 
-  card.append(imgAtleta, nomeAtleta, disciplinaAtleta, atletaSquadra, deleteBtn);
+  card.append(imgAtleta, nomeAtleta, disciplinaAtleta, labelSquadra, deleteBtn);
 
   return card;
 }
 
 export function renderAtleti(): void {
   // TODO: svuota il container e aggiungi una card per ogni atleta visibile.
-  container.innerHTML = '';
-  for(const a of getAtletiVisibili()) {
-    container.appendChild(creaCard(a))
+  container.innerHTML = "";
+  for (const a of getAtletiVisibili()) {
+    container.appendChild(creaCard(a));
   }
 }

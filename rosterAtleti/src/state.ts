@@ -6,23 +6,38 @@ import { carica, salva } from "./storage";
 let atleti: Atleta[] = carica();
 let filtroCorrente: Filtro = "tutti";
 
-export function aggiungiAtleta(nome: string, disciplina: string, foto: string): void {
+export function aggiungiAtleta(
+  nome: string,
+  disciplina: string,
+  foto: string,
+): void {
   // TODO: crea un nuovo Atleta (id univoco, inSquadra: false),
   // aggiungilo all'array e salva.
+
   atleti.push({ id: Date.now(), nome, disciplina, foto, inSquadra: false });
+
   salva(atleti);
 }
 
 export function eliminaAtleta(id: number): void {
   // TODO: rimuovi l'atleta con quell'id e salva.
-  atleti = atleti.filter((a) => a.id !== id);
-  salva(atleti);
+  const risposta = confirm("Sei sicuro di voler cancellare?");
+  if (risposta) {
+    // in questo caso viene creato un nuovo array con tutti i valori tranne quello che corrisponde alla condizione
+    // atleti = atleti.filter((a) => a.id !== id);
+
+    const indice = atleti.findIndex((a) => a.id === id);
+    atleti.splice(indice, 1);
+
+    salva(atleti);
+  }
 }
 
 export function impostaInSquadra(id: number, inSquadra: boolean): void {
   // TODO: trova l'atleta, aggiorna inSquadra e salva.
+  // find mi restituisce un oggetto
   const atleta = atleti.find((a) => a.id === id);
-  if(!atleta) return;
+  if (!atleta) return;
   atleta.inSquadra = inSquadra;
   salva(atleti);
 }
@@ -35,9 +50,14 @@ export function impostaFiltro(filtro: Filtro): void {
 export function getAtletiVisibili(): Atleta[] {
   // TODO: restituisci solo gli atleti che rispettano filtroCorrente.
   return atleti.filter((a) => {
-    if(filtroCorrente === "inSquadra") return !a.inSquadra;
-    if(filtroCorrente === "riserve") return !a.inSquadra;
-    return true;
-  })
-  // return [];
+    if (filtroCorrente === "inSquadra") {
+      return atleti.filter((a) => a.inSquadra);
+    }
+
+    if (filtroCorrente === "riserve") {
+      return atleti.filter((a) => !a.inSquadra);
+    }
+
+    return atleti;
+  });
 }
